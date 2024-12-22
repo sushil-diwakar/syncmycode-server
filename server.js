@@ -13,7 +13,7 @@ const server = http.createServer(app);
 // Frontend URLs
 const allowedOrigins = [
     'http://localhost:3000', // Frontend URL 1 (React dev server)
-    'https://yourfrontendurl.com', // Frontend URL 2 (production URL)
+    'https://syncmycode.onrender.com', // Frontend URL 2 (production URL)
 ];
 
 // Socket.io with CORS options

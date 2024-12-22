@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const codeRoutes = require('./routes/codeRoutes');
+const path = require('path');
 
 dotenv.config();
 const app = express();
@@ -70,6 +71,15 @@ io.on('connection', (socket) => {
         console.log('Client disconnected');
     });
 });
+// Serve static files in production (after building React app)
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, 'client/build')));
+
+    // Catch-all route to serve index.html for all non-API routes
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    });
+}
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {

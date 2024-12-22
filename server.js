@@ -9,16 +9,42 @@ const codeRoutes = require('./routes/codeRoutes');
 dotenv.config();
 const app = express();
 const server = http.createServer(app);
+
+// Frontend URLs
+const allowedOrigins = [
+    'http://localhost:3000', // Frontend URL 1 (React dev server)
+    'https://yourfrontendurl.com', // Frontend URL 2 (production URL)
+];
+
+// Socket.io with CORS options
 const io = new Server(server, {
     cors: {
-        origin: '*', // Update with your frontend URL if necessary
+        origin: function(origin, callback) {
+            if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+                callback(null, true); // Allow request
+            } else {
+                callback(new Error('Not allowed by CORS')); // Reject request
+            }
+        },
         methods: ['GET', 'POST', 'PUT'],
     },
 });
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+
+// CORS middleware configuration for express
+app.use(cors({
+    origin: function(origin, callback) {
+        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+            callback(null, true); // Allow request
+        } else {
+            callback(new Error('Not allowed by CORS')); // Reject request
+        }
+    },
+    methods: ['GET', 'POST', 'PUT'],
+    allowedHeaders: ['Content-Type', 'Authorization'], // Adjust headers if needed
+}));
 
 // Connect to Database
 connectDB();

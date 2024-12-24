@@ -1,6 +1,11 @@
 const Code = require('../models/Code');
 const { v4: uuidv4 } = require('uuid');
 
+//Get API testing
+const getHome = async (req, res) => {
+    res.status(200).json({status: "API is working"});
+};
+
 // Create Code
 const createCode = async (req, res) => {
     const { id, content = '', language = 'javascript' } = req.body; // Default values
@@ -45,4 +50,4 @@ const updateCode = async (req, res) => {
     }
 };
 
-module.exports = { createCode, getCode, updateCode };
+module.exports = { getHome, createCode, getCode, updateCode };

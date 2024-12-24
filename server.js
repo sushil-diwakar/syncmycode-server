@@ -14,6 +14,7 @@ const server = http.createServer(app);
 // Frontend URLs
 const allowedOrigins = [
     'http://localhost:3000', // Frontend URL 1 (React dev server)
+    'http://91.108.110.210',
     'https://syncmycode.onrender.com', // Frontend URL 2 (production URL)
 ];
 

@@ -30,7 +30,7 @@ const io = new Server(server, {
         },
         methods: ['GET', 'POST', 'PUT'],
     },
-    transports: ['websocket', 'polling'], // Allow both WebSocket and fallback
+    transports: ['websocket'], // Allow both WebSocket and fallback
 });
 
 // Middleware

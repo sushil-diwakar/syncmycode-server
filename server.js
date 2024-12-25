@@ -13,15 +13,15 @@ const server = http.createServer(app);
 
 // Frontend URLs
 const allowedOrigins = [
-    'http://localhost:3000', // Frontend URL 1 (React dev server)
-    'http://91.108.110.210',
-    'https://syncmycode.onrender.com', // Frontend URL 2 (production URL)
+    'http://localhost:3000', // React dev server (local)
+    'http://91.108.110.210', // Your VPS IP address
+    'https://syncmycode.onrender.com', // Production URL
 ];
 
 // Socket.io with CORS options
 const io = new Server(server, {
     cors: {
-        origin: function(origin, callback) {
+        origin: function (origin, callback) {
             if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
                 callback(null, true); // Allow request
             } else {
@@ -29,16 +29,16 @@ const io = new Server(server, {
             }
         },
         methods: ['GET', 'POST', 'PUT'],
+        transports: ['websocket', 'polling'], // Allow both WebSocket and Polling (for fallback)
     },
-    transports: ['websocket', 'polling'], // Allow both WebSocket and fallback
 });
 
-// Middleware
+// Middleware for JSON parsing
 app.use(express.json());
 
-// CORS middleware configuration for express
+// CORS middleware configuration for express (if needed)
 app.use(cors({
-    origin: function(origin, callback) {
+    origin: function (origin, callback) {
         if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
             callback(null, true); // Allow request
         } else {
@@ -52,27 +52,31 @@ app.use(cors({
 // Connect to Database
 connectDB();
 
-// Routes
+// API Routes
 app.use('/api/code', codeRoutes);
 
 // Socket.io for real-time collaboration
 io.on('connection', (socket) => {
     console.log('New client connected');
 
+    // Listen for joining a room (editor session)
     socket.on('join', (roomId) => {
         console.log(`Client joined room: ${roomId}`);
         socket.join(roomId);
     });
 
+    // Listen for edits to the code in the editor
     socket.on('edit', ({ roomId, content }) => {
         console.log(`Received edit for room: ${roomId}`);
-        socket.to(roomId).emit('text-change', content); // Broadcast changes
+        socket.to(roomId).emit('text-change', content); // Broadcast text changes to all other clients in the room
     });
 
+    // Handle disconnections
     socket.on('disconnect', () => {
         console.log('Client disconnected');
     });
 });
+
 // Serve static files in production (after building React app)
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, 'client/build')));
@@ -83,7 +87,7 @@ if (process.env.NODE_ENV === 'production') {
     });
 }
 
-// Error Handling Middleware
+// Error Handling Middleware (for uncaught errors)
 app.use((err, req, res, next) => {
     res.status(500).json({ error: err.message });
 });

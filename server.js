@@ -48,7 +48,6 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT'],
     allowedHeaders: ['Content-Type', 'Authorization'], // Adjust headers if needed
 }));
-io.origins(allowedOrigins); // For socket.io
 
 // Connect to Database
 connectDB();

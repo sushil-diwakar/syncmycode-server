@@ -14,7 +14,7 @@ const server = http.createServer(app);
 // Frontend URLs
 const allowedOrigins = [
     'http://localhost:3000', // React dev server (local)
-    'http://91.108.110.210', // Your VPS IP address
+    'http://takesarkarinaukri.com', // Your VPS IP address
     'https://syncmycode.onrender.com', // Production URL
 ];
 

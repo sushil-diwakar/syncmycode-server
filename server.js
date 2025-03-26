@@ -15,8 +15,9 @@ const server = http.createServer(app);
 const allowedOrigins = [
     'http://localhost:3000', // React dev server (local)
     'http://takesarkarinaukri.com', // Your VPS IP address
-    'https://syncmycode.onrender.com', // Production URL
-    'https://syncmycode.vercel.app'
+    'https://syncmycode.onrender.com', 
+    'https://syncmycode.vercel.app',
+    'https://syncmycode.sushildiwakar.com' // Production URL
 ];
 
 // Socket.io with CORS options
@@ -54,7 +55,7 @@ app.use(cors({
 connectDB();
 
 // API Routes
-app.use('/api/code', codeRoutes);
+app.use('/v1/code', codeRoutes);
 
 // Socket.io for real-time collaboration
 io.on('connection', (socket) => {

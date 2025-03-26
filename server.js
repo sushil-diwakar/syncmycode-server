@@ -16,6 +16,7 @@ const allowedOrigins = [
     'http://localhost:3000', // React dev server (local)
     'http://takesarkarinaukri.com', // Your VPS IP address
     'https://syncmycode.onrender.com', // Production URL
+    'https://syncmycode.vercel.app'
 ];
 
 // Socket.io with CORS options
